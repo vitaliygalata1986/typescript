@@ -1,56 +1,35 @@
-const arr = ['sdf', 1];
-// функция, которая будет логировать переданный нами id
-// принимает Union тип
-function logId(id: string | number | boolean) {
-  if (typeof id === 'string') {
-    console.log(id);
-  } else if (typeof id === 'number') {
-    console.log(id);
-  } else {
-    console.log(id);
-  }
+// типизируем функцию для фетч запроса
+
+// если запишем так, то сможем передать любое слово в method, которое и не является method
+// метод должен быть get/post и т.д.
+// поэтому создадим enum
+
+enum RequestType {
+  GET = 'get',
+  POST = 'post',
+}
+/*
+function fetchWithAuth(url: string, method: RequestType) {
+
+}
+*/
+
+// сделаем через Literal Types
+function fetchWithAuth(url: string, method: 'post' | 'get') {}
+
+fetchWithAuth('s', 'post');
+// fetchWithAuth('s', 's'); // это будет неккоректно
+
+// можем указать возвращаемый тип
+// и тогда мы можем вернуть 1/-1
+function fetchWithAuthAll(url: string, method: 'post' | 'get'): 1 | -1 {
+  return 1;
 }
 
-// теперь можем функцию вызвать либо с number либо с string
-logId(1);
-logId('text');
-logId(true);
+let method = 'post';
+// const method = 'post';
 
-// работа со cложными типами
-// функция будет принимать либо одну ошибку либо массив ошибок
-function logError(err: string | string[]) {
-  if (Array.isArray(err)) {
-    // если это массив
-    console.log(err);
-  } else {
-    console.log(err);
-  }
-}
-
-console.log(logError(['error1', 'error2'])); // [ 'error1', 'error2' ]
-
-// принимаем объект, у которого есть либо свойство a/b
-function logObject(obj: { a: number } | { b: number }) {
-  // оператор in - проверяет, а есль ли тот или иной ключ в объекте
-  if ('a' in obj) {
-    console.log(obj.a);
-  } else {
-    console.log(obj.b);
-  }
-}
-logObject({ a: 10, b: 1 }); // 10
-// функция, которая принимает multiply dist
-// в обоих случаях есть тип string
-function logMultipleIds(a: string | number, b: string | boolean) {
-  // чтобы сделать сужжение в таких случаях
-  if (a === b) {
-    // а по типу равно b ?
-    // то мы можем обращаться к a/b обращаться как к строке
-    return a.length;
-  } else {
-    return b;
-  }
-}
-
-console.log(logMultipleIds('text', true)); // true
-console.log(logMultipleIds('text', 'text')); // 4
+// так не получится
+// идет проверка на типы
+// сделаем константой
+fetchWithAuthAll('s', method as 'post');
