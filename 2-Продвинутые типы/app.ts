@@ -26,10 +26,12 @@ function fetchWithAuthAll(url: string, method: 'post' | 'get'): 1 | -1 {
   return 1;
 }
 
-let method = 'post';
-// const method = 'post';
-
 // так не получится
 // идет проверка на типы
+let method = 'post';
+
 // сделаем константой
+// const method = 'post';
+
+// fetchWithAuthAll('s', method);
 fetchWithAuthAll('s', method as 'post');
