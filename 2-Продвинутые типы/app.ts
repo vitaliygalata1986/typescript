@@ -1,56 +1,39 @@
-const arr = ['sdf', 1];
-// функция, которая будет логировать переданный нами id
-// принимает Union тип
-function logId(id: string | number | boolean) {
-  if (typeof id === 'string') {
-    console.log(id);
-  } else if (typeof id === 'number') {
-    console.log(id);
-  } else {
-    console.log(id);
+function logId(id: string | number): void {
+  // void обозначает, что функция ничего не возвращает
+  console.log(id);
+}
+
+const a = logId(1);
+
+// в таком случае функция будет возвращать alias между number/undefined
+function multiply(f: number, s?: number) {
+  if (!s) {
+    return f * f;
   }
 }
 
-// теперь можем функцию вызвать либо с number либо с string
-logId(1);
-logId('text');
-logId(true);
-
-// работа со cложными типами
-// функция будет принимать либо одну ошибку либо массив ошибок
-function logError(err: string | string[]) {
-  if (Array.isArray(err)) {
-    // если это массив
-    console.log(err);
-  } else {
-    console.log(err);
+// поэтому дотипизируем ее:
+function multiplyOptimization(f: number, s?: number): number | void {
+  if (!s) {
+    return f * f;
   }
 }
 
-console.log(logError(['error1', 'error2'])); // [ 'error1', 'error2' ]
+type voidFunc = () => void;
 
-// принимаем объект, у которого есть либо свойство a/b
-function logObject(obj: { a: number } | { b: number }) {
-  // оператор in - проверяет, а есль ли тот или иной ключ в объекте
-  if ('a' in obj) {
-    console.log(obj.a);
-  } else {
-    console.log(obj.b);
-  }
-}
-logObject({ a: 10, b: 1 }); // 10
-// функция, которая принимает multiply dist
-// в обоих случаях есть тип string
-function logMultipleIds(a: string | number, b: string | boolean) {
-  // чтобы сделать сужжение в таких случаях
-  if (a === b) {
-    // а по типу равно b ?
-    // то мы можем обращаться к a/b обращаться как к строке
-    return a.length;
-  } else {
-    return b;
-  }
-}
+const f1: voidFunc = () => {};
 
-console.log(logMultipleIds('text', true)); // true
-console.log(logMultipleIds('text', 'text')); // 4
+const f2: voidFunc = () => {
+  return true; // на этот возврат будет игнорироваться
+};
+
+const b = f2(); // void
+
+const skills = ['Dev', 'DevOps'];
+
+const user = {
+  s: ['s'],
+};
+
+skills.forEach((skill) => user.s.push(skill));
+console.log(user); // { s: [ 's', 'Dev', 'DevOps' ] }
