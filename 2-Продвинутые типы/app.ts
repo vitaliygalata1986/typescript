@@ -36,4 +36,4 @@ const user = {
 };
 
 skills.forEach((skill) => user.s.push(skill));
-console.log(user); // { s: [ 's', 'Dev', 'DevOps' ] }
+console.log(user); // { s: [ 's', 'Dev', 'DevOps' ]}
