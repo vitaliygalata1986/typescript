@@ -1,56 +1,51 @@
-const arr = ['sdf', 1];
-// функция, которая будет логировать переданный нами id
-// принимает Union тип
-function logId(id: string | number | boolean) {
-  if (typeof id === 'string') {
-    console.log(id);
-  } else if (typeof id === 'number') {
-    console.log(id);
+let input: unknown;
+//let input: any;
+
+input = 3;
+input = ['sf', 'sdf'];
+
+// мы не можем тип unknow положить в переменную, передать функцию в качестве параметра в которйо задан тип
+// пока мы не сделем приведение типов или определим, что это за тип
+// let res: string = input;
+
+// мы можем тип unknown записать в any
+let res: any = input;
+
+function run(i: unknown) {
+  if (typeof i == 'number') {
+    i++;
   } else {
-    console.log(id);
+    i;
   }
 }
 
-// теперь можем функцию вызвать либо с number либо с string
-logId(1);
-logId('text');
-logId(true);
+run(input);
 
-// работа со cложными типами
-// функция будет принимать либо одну ошибку либо массив ошибок
-function logError(err: string | string[]) {
-  if (Array.isArray(err)) {
-    // если это массив
-    console.log(err);
-  } else {
-    console.log(err);
+async function getData() {
+  try {
+    await fetch('');
+  } catch (error) {
+    // error - unknown
+    // console.log(error.message); // не можем обратится к message, так как error - unknown
+    // для этого мы должны проверить, что error это именно ошибка
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
   }
 }
 
-console.log(logError(['error1', 'error2'])); // [ 'error1', 'error2' ]
-
-// принимаем объект, у которого есть либо свойство a/b
-function logObject(obj: { a: number } | { b: number }) {
-  // оператор in - проверяет, а есль ли тот или иной ключ в объекте
-  if ('a' in obj) {
-    console.log(obj.a);
-  } else {
-    console.log(obj.b);
-  }
-}
-logObject({ a: 10, b: 1 }); // 10
-// функция, которая принимает multiply dist
-// в обоих случаях есть тип string
-function logMultipleIds(a: string | number, b: string | boolean) {
-  // чтобы сделать сужжение в таких случаях
-  if (a === b) {
-    // а по типу равно b ?
-    // то мы можем обращаться к a/b обращаться как к строке
-    return a.length;
-  } else {
-    return b;
+// так тоже можно, но  не рекомендуется
+async function getDataForce() {
+  try {
+    await fetch('');
+  } catch (error) {
+    const e = error as Error; // явное приведение типа к Error
+    console.log(e.message);
   }
 }
 
-console.log(logMultipleIds('text', true)); // true
-console.log(logMultipleIds('text', 'text')); // 4
+// как unknown ведет себя с type Alias
+// все, что с unknown всегда становится unknown
+type U1 = unknown | null;
+
+type I1 = unknown & string; // I1 будет string
