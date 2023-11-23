@@ -1,56 +1,34 @@
-const arr = ['sdf', 1];
-// функция, которая будет логировать переданный нами id
-// принимает Union тип
-function logId(id: string | number | boolean) {
-  if (typeof id === 'string') {
-    console.log(id);
-  } else if (typeof id === 'number') {
-    console.log(id);
+const n: null = null;
+
+// мы не можем null присвоить undefined:
+// const n1: null = undefined;
+
+// null можем присвоить any:
+const n1: any = null;
+
+// а вот number будет ошибка, также string и boolean
+const n2: number = null;
+const n3: string = null;
+const n4: boolean = null;
+
+// функция получает пользователя с базы
+
+interface User {
+  name: string;
+}
+
+function getUser() {
+  // чтобы сэмитировать, что мы можем найти или не найти пользователя с базы
+  if (Math.random() > 0.5) {
+    return null;
   } else {
-    console.log(id);
+    return {
+      name: 'Lena',
+    } as User;
   }
 }
 
-// теперь можем функцию вызвать либо с number либо с string
-logId(1);
-logId('text');
-logId(true);
-
-// работа со cложными типами
-// функция будет принимать либо одну ошибку либо массив ошибок
-function logError(err: string | string[]) {
-  if (Array.isArray(err)) {
-    // если это массив
-    console.log(err);
-  } else {
-    console.log(err);
-  }
+const user = getUser();
+if (user) {
+  const findUser = user.name;
 }
-
-console.log(logError(['error1', 'error2'])); // [ 'error1', 'error2' ]
-
-// принимаем объект, у которого есть либо свойство a/b
-function logObject(obj: { a: number } | { b: number }) {
-  // оператор in - проверяет, а есль ли тот или иной ключ в объекте
-  if ('a' in obj) {
-    console.log(obj.a);
-  } else {
-    console.log(obj.b);
-  }
-}
-logObject({ a: 10, b: 1 }); // 10
-// функция, которая принимает multiply dist
-// в обоих случаях есть тип string
-function logMultipleIds(a: string | number, b: string | boolean) {
-  // чтобы сделать сужжение в таких случаях
-  if (a === b) {
-    // а по типу равно b ?
-    // то мы можем обращаться к a/b обращаться как к строке
-    return a.length;
-  } else {
-    return b;
-  }
-}
-
-console.log(logMultipleIds('text', true)); // true
-console.log(logMultipleIds('text', 'text')); // 4
