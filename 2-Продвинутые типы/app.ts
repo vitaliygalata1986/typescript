@@ -1,56 +1,71 @@
-const arr = ['sdf', 1];
-// функция, которая будет логировать переданный нами id
-// принимает Union тип
-function logId(id: string | number | boolean) {
+interface User {
+  name: string;
+  email: string;
+  login: string;
+}
+
+const user: User = {
+  name: 'Вася',
+  email: 'test@test.com',
+  login: 'loginVasya',
+};
+
+interface Admin {
+  name: string;
+  role: number;
+}
+
+const admin: Admin = {
+  name: 'admin',
+  role: 1,
+};
+
+//  функция будет логировать наш id в какую-то внешнюю систему,
+// где ему явно нужна строка
+/*
+function logId(id: string | number) {
   if (typeof id === 'string') {
-    console.log(id);
+    console.log(id); // id будет string
   } else if (typeof id === 'number') {
-    console.log(id);
-  } else {
-    console.log(id);
+    console.log(id); // id будет number
+  }
+}
+*/
+
+// функция, которая будет являться type gard
+// так записывается простая функция type gard с его возвратом
+function isString(x: string | number): x is string {
+  // из этих двух типов: string | number - x - является строкой
+  return typeof x === 'string';
+}
+
+function logId(id: string | number) {
+  if (isString(id)) {
+    console.log(id); // id будет string
+  } else if (typeof id === 'number') {
+    console.log(id); // id будет number
   }
 }
 
-// теперь можем функцию вызвать либо с number либо с string
-logId(1);
-logId('text');
-logId(true);
+// более сложный type guard на сложных объектах и интерфейсах
+function isAdmin(user: User | Admin): user is Admin {
+  // user должен быть админом
+  return 'role' in user; // ключ role есть только у user
+}
 
-// работа со cложными типами
-// функция будет принимать либо одну ошибку либо массив ошибок
-function logError(err: string | string[]) {
-  if (Array.isArray(err)) {
-    // если это массив
-    console.log(err);
+function isAdminAlternative(user: User | Admin): user is Admin {
+  return (user as Admin).role !== undefined;
+}
+
+// функция, которая меняет роли
+function setRole(user: User | Admin) {
+  // if (isAdmin(user)) {
+  if (isAdminAlternative(user)) {
+    user.role = 0;
   } else {
-    console.log(err);
+    throw new Error('Пользователь не админ');
   }
 }
 
-console.log(logError(['error1', 'error2'])); // [ 'error1', 'error2' ]
-
-// принимаем объект, у которого есть либо свойство a/b
-function logObject(obj: { a: number } | { b: number }) {
-  // оператор in - проверяет, а есль ли тот или иной ключ в объекте
-  if ('a' in obj) {
-    console.log(obj.a);
-  } else {
-    console.log(obj.b);
-  }
-}
-logObject({ a: 10, b: 1 }); // 10
-// функция, которая принимает multiply dist
-// в обоих случаях есть тип string
-function logMultipleIds(a: string | number, b: string | boolean) {
-  // чтобы сделать сужжение в таких случаях
-  if (a === b) {
-    // а по типу равно b ?
-    // то мы можем обращаться к a/b обращаться как к строке
-    return a.length;
-  } else {
-    return b;
-  }
-}
-
-console.log(logMultipleIds('text', true)); // true
-console.log(logMultipleIds('text', 'text')); // 4
+setRole(admin);
+console.log(admin); // { name: 'admin', role: 0 }
