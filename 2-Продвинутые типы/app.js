@@ -32,4 +32,5 @@ function userToAdmin(user) {
         role: 1,
     };
 }
-console.log(userToAdmin(user)); // { name: 'Вася', role: 1 }
+var admin = userToAdmin(user);
+console.log(admin); // { name: 'Вася', role: 1 }

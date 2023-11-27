@@ -63,4 +63,6 @@ function userToAdmin(user: User): Admin {
   };
 }
 
-console.log(userToAdmin(user)); // { name: 'Вася', role: 1 }
+const admin = userToAdmin(user);
+
+console.log(admin); // { name: 'Вася', role: 1 }
