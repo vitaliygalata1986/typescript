@@ -41,8 +41,10 @@ function isSuccess(res: Res): res is IResponseSuccess {
   return false;
 }
 
-function getIdFromData(res: Res):number {
+function getIdFromData(res: Res): number {
   if (isSuccess(res)) {
-    return res data.databaseId
+    return res.data.databaseId;
+  } else {
+    throw new Error(res.data.errorMessage);
   }
 }
