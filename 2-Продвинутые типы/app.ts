@@ -1,56 +1,21 @@
-const arr = ['sdf', 1];
-// функция, которая будет логировать переданный нами id
-// принимает Union тип
-function logId(id: string | number | boolean) {
-  if (typeof id === 'string') {
-    console.log(id);
-  } else if (typeof id === 'number') {
-    console.log(id);
-  } else {
-    console.log(id);
-  }
+interface User {
+  name: string;
 }
 
-// теперь можем функцию вызвать либо с number либо с string
-logId(1);
-logId('text');
-logId(true);
+/*
+const a: User = {
+  name: 'Вася',
+};
+*/
+const a = {};
+assertUser(a);
+a.name = 'Вася'; // a приобрел значение User
 
-// работа со cложными типами
-// функция будет принимать либо одну ошибку либо массив ошибок
-function logError(err: string | string[]) {
-  if (Array.isArray(err)) {
-    // если это массив
-    console.log(err);
-  } else {
-    console.log(err);
+// проверим - является ли объект пользователем
+function assertUser(obj: unknown): asserts obj is User {
+  // изначально мы не знаем, что это за объект
+  if (typeof obj === 'object' && !!obj && 'name' in obj) {
+    return;
   }
+  throw new Error('Не пользователь');
 }
-
-console.log(logError(['error1', 'error2'])); // [ 'error1', 'error2' ]
-
-// принимаем объект, у которого есть либо свойство a/b
-function logObject(obj: { a: number } | { b: number }) {
-  // оператор in - проверяет, а есль ли тот или иной ключ в объекте
-  if ('a' in obj) {
-    console.log(obj.a);
-  } else {
-    console.log(obj.b);
-  }
-}
-logObject({ a: 10, b: 1 }); // 10
-// функция, которая принимает multiply dist
-// в обоих случаях есть тип string
-function logMultipleIds(a: string | number, b: string | boolean) {
-  // чтобы сделать сужжение в таких случаях
-  if (a === b) {
-    // а по типу равно b ?
-    // то мы можем обращаться к a/b обращаться как к строке
-    return a.length;
-  } else {
-    return b;
-  }
-}
-
-console.log(logMultipleIds('text', true)); // true
-console.log(logMultipleIds('text', 'text')); // 4
